@@ -44,6 +44,7 @@ export default function Feed() {
       setItems((prevItems) => [...prevItems, ...newItems]);
       setHasMore(page < 5); // Limit to 5 pages for this example
     } catch (err) {
+      console.error(err);
       setError("Failed to fetch items. Please try again.");
     } finally {
       setLoading(false);
