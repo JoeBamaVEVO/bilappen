@@ -1,8 +1,7 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { getUserFromDbDuringLogin } from "@/../prisma/database"
-import { saltAndHashPassword } from "@/../utils"
-import { compare } from "bcryptjs"
+import { cp } from "fs"
  
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -29,5 +28,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // return user object with their profile data
         return user
       },
-    }),],
+    }),
+  ], 
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.uuid = user.id
+      }
+      return {...token}
+    },
+    session({ session, token }) {
+      session.user.uuid = token.uuid as string
+      return session
+    },
+  },
 })

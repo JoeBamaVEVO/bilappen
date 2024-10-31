@@ -2,8 +2,14 @@
 
 import { useState } from "react";
 import { Moon, Sun } from "lucide-react";
+import Link from "next/link";
 
-export default function Navbar() {
+const links = [
+  { name: "Home", href: "/" },
+  { name: "Min side", href: "/minside" },
+];
+
+export default function Navbar({ session }: { session: any }) {
   const [theme, setTheme] = useState("light");
 
   const toggleTheme = () => {
@@ -36,36 +42,48 @@ export default function Navbar() {
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
-            <li>
-              <a>Home</a>
-            </li>
-            <li>
-              <a>About</a>
-            </li>
-            <li>
-              <a>Services</a>
-            </li>
-            <li>
-              <a>Contact</a>
-            </li>
+            {links &&
+              links.map((link) => (
+                <li key={link.name}>
+                  <Link href={link.href}>{link.name}</Link>
+                </li>
+              ))}
+            {session?.user ? (
+              <li>
+                <p>Logout</p>
+              </li>
+            ) : (
+              <li>
+                <Link className="" href="/login">
+                  Login
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
-        <a className="btn btn-ghost normal-case text-xl">🚗💨Bilappen</a>
+        <Link href={"/"} className="btn btn-ghost normal-case text-xl">
+          🚗💨Bilappen
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <li>
-            <a>Home</a>
-          </li>
-          <li>
-            <a>About</a>
-          </li>
-          <li>
-            <a>Services</a>
-          </li>
-          <li>
-            <a>Contact</a>
-          </li>
+          {links &&
+            links.map((link) => (
+              <li key={link.name}>
+                <Link href={link.href}>{link.name}</Link>
+              </li>
+            ))}
+          {session?.user ? (
+            <li>
+              <p>Logout</p>
+            </li>
+          ) : (
+            <li>
+              <Link className="" href="/login">
+                Login
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
       <div className="navbar-end">
